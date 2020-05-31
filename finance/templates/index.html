@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Home
+{% endblock %}
+
+{% block main %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Symbol</th>
+                <th>Name</th>
+                <th>Shares</th>
+                <th>Price</th>
+                <th>TOTAL</th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <td colspan="4"></td>
+                <td>///</td>
+            </tr>
+        </tfoot>
+        <tbody>
+            {{ for action in transactions }}
+                <tr>
+                    <td>{{ action["symbol"] }}</td>
+                    <td>{{ action["name"] }}</td>
+                    <td>{{ action["shares"] }}</td>
+                    <td>${{ action["price"] }}</td>
+                    <td>${{ action["total"] }}</td>
+                </tr>
+            {{ endfor }}
+            <tr>
+                <td colspan="4">CASH</td>
+                <td>{{ cash }}</td>
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}

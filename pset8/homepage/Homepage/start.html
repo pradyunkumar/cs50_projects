@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="description"
+              content="The desciption">
+        <meta name="author"
+              content="Pradyun Kumar">
+        <meta name="keywords"
+              content="Improve Yourself Today">
+        <meta name="viewport"
+              content="width=device-width, initial-scale=1.0">
+        <title>SelfPro</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link rel="stylesheet" href="styles.css">
+
+    </head>
+    
+    <body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="#">Welcome!</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item ">
+            <a class="nav-link" href="index.html">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="whatis.html">What is Self-Improvement?</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="start.html">Start My Journey <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="quotes.html">Quotes</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="about.html">About</a>
+          </li>
+          <li class="nav-item">
+            <a style="color: white" class="nav-link right btn btn-secondary" href="login.html">Login</a>  
+          </li>
+        </ul>
+      </div>
+    </nav>
+        
+    <div class="container-fluid" style="padding-bottom: 20px; padding-left: 30px">
+        <h1 class="title">Let's Begin!</h1>
+    </div>
+        
+    <div class="container-fluid" style="padding-bottom: 200px; padding-left: 50px; ">
+        <script>
+            class Task {
+                constructor(nameid, tagid, esttimeid){
+                    if (nameid != null && tagid != null && esttimeid != null){
+                        this.name = document.querySelector(nameid).value;
+                        this.tag = document.querySelector(tagid).value;
+                        this.time = this.decimalTime(document.querySelector(esttimeid).value);
+                    }
+                    this.sched = null;
+                }
+                
+                decimalTime(stringTime){
+                    var parts = stringTime.split(",");
+                    var hour = parts[0].split(" ");
+                    var minute = parts[1].split(" ");
+                    var count = 0;
+                    while (hour[count] == ""){
+                        count++;
+                    }
+                    var thehour = parseInt(hour[count]);
+                    count = 0;
+                    while (minute[count] == ""){
+                        count++;
+                    }
+                    var theminute = parseInt(minute[count]);
+                    return (parseFloat(thehour + theminute/60.0)).toFixed(2);
+                }
+                
+                stringTime(){
+                    var hours = this.sched.getHours();
+                    var extension = " AM ";
+                    if (hours > 12){
+                        hours -= 12;
+                        extension = " PM ";
+                    }
+                    var minutes = this.sched.getMinutes().toString();
+                    if (minutes == "0"){
+                        minutes = minutes.concat("0");
+                    }
+                    var finalstring = hours.toString().concat(":").concat(minutes).concat(extension);
+                    return finalstring;
+                }
+                
+                set thename(thename){
+                    this.name = thename;
+                }
+                set thetime(thetime){
+                    this.time = thetime;
+                }
+                set thetag(thetag){
+                    this.tag = thetag;
+                }
+                
+                set schedtime(sched){
+                    var date = new Date();
+                    var hours = sched;
+                    var minutes = 0;
+                    var remainder = sched % 1;
+                    if (remainder != 0){
+                        minutes += remainder * 60;
+                        hours -= remainder;
+                    }
+                    this.sched = new Date(date.getYear(), date.getMonth(), date.getDay(), hours, minutes);
+                }
+
+                get thename(){
+                    return this.name;
+                }
+
+                get thetime(){
+                    return this.time;
+                }
+
+                get thetag(){
+                    return this.thetag;
+                }
+                
+                get schedtime(){
+                    return this.sched;
+                }
+            }
+
+            class Instruction {            
+                constructor(startid, endid){
+                    this.achievelist = [];
+                    this.routinelist = [];
+                    this.pleasantlist = [];
+                    this.start= processTime(document.querySelector(startid).value);
+                    this.end= processTime(document.querySelector(endid).value);
+                    this.count = 1;
+                }
+                thelist(task){
+                    if (task.tag == "Achievement"){
+                      return this.achievelist;
+                    }
+                    else if (task.tag == "Routine"){
+                      return this.routinelist;
+                    }
+                    else {
+                      return this.pleasantlist;
+                    }
+                }
+                
+                addTask(name, tag, time){
+                    var task = new Task(name, tag, time);
+                    this.thelist(task).push(task);
+                    this.printtask(task);
+                    this.count++;
+                    return task;
+                }
+                
+                printtask(task){
+                    var para = document.createElement("p");
+                    var node = document.createTextNode(this.count +".        " + task.tag + " task, " + task.name + " for " + task.time + " hours.");
+                    para.appendChild(node);
+                    var element = document.getElementById("tasklist");
+                    element.appendChild(para);
+                }
+                
+                removeTask(task){
+                    var thelist = this.thelist(task);
+                    (this.thelist(task)).splice(thelist.indexOf(task), 1);
+                    this.count--;
+                    return this.tasklist;
+                }
+                
+                set starttime(time) {
+                    this.start = processTime(time);
+                }
+                
+                set endtime(time) {
+                    this.end = processTime(time);
+                }                
+
+                get achievementtasks(){
+                    return this.achievelist;
+                }
+
+                get routinetasks(){
+                    return this.routinelist;
+                }
+
+                get pleasanttasks(){
+                  return this.pleasantlist;
+                }
+
+                get starttime(){
+                  return this.start;
+                }
+                
+                get numTasks(){
+                    return this.count;
+                }
+
+                get endtime(){
+                  return this.end;
+                }
+            }
+
+            class Schedule {
+                constructor(instruction){
+                    this.instruction = instruction;
+                    this.dayplan = [];
+                    this.currenttime = this.instruction.starttime.getHours();
+                }
+
+                makeSchedule(){
+                    var todo_p = instruction.pleasanttasks;
+                    var todo_a = instruction.achievementtasks;
+                    var todo_r = instruction.routinetasks;
+                    
+//                    if (todo_p.length < 1 || todo_a.length < 1 || todo_r.length < 1){
+//                        document.querySelector("#schedule").innerHTML = "Add more Tasks!";
+//                    }
+//                    else {
+                        this.makeSegment(7.5, todo_r);
+                        this.addExtra("Breakfast", 0.5, "Routine");
+                        while (this.currenttime < 12){
+                            var end = this.currenttime + 1;
+                            this.makeSegment(end, todo_a);
+                            this.addExtra("Break", 0.25, "Pleasant");
+                        }
+                        this.addExtra("Lunch + Break", 1, "Routine");
+                        while (this.currenttime < 17){
+                            var end = this.currenttime + 1;
+                            this.makeSegment(end, todo_a);
+                            this.addExtra("Break", 0.25, "Pleasant");
+                        } 
+                        this.makeSegment(19, todo_p);
+                        this.addExtra("Dinner", 0.5, "Routine");   
+                    
+                        this.makeSegment(this.instruction.endtime.getHours() + 12, todo_p);
+                        this.addExtra("Sleep", 0, "Routine"); 
+                        this.printplan();
+//                    }
+                        
+                    
+                }
+                addExtra(name, length, tag){
+                    var meal = new Task();
+                    meal.thename = name;
+                    meal.thetag = tag;
+                    meal.thetime = length;
+                    meal.schedtime = this.currenttime;
+                    this.currenttime += length;
+                    this.dayplan.push(meal);
+                }
+                makeSegment(end, list){
+                    while (this.currenttime < end){
+                        if (list.length > 0){
+                            var task =list[0];
+                            task.schedtime = this.currenttime;
+                            this.dayplan.push(task);
+                            this.currenttime += parseFloat(task.time);
+                            list.splice(0, 1);
+                        } 
+                        else {
+                            var freetime = new Task();
+                            freetime.thename = "Freetime! Consider trying something new!";
+                            freetime.thetag = "Pleasant";
+                            freetime.schedtime = (this.currenttime);
+                            freetime.thetime = end - this.currenttime;
+                            this.dayplan.push(freetime);
+                            this.currenttime = end;
+                        }
+                    }
+                }
+                printplan(){
+                    var i;
+                    for (i = 0; i < this.dayplan.length; i++) {
+                        var task = this.dayplan[i];
+                        var para = document.createElement("p");
+                        var brak = document.createElement("br");
+                        var node = document.createTextNode(task.stringTime() + "\t" + task.name);
+                        para.appendChild(document.createTextNode(task.stringTime()));
+                        para.append(brak);
+                        para.appendChild(document.createTextNode(task.name));
+                        var element = document.getElementById("schedule");
+                        element.appendChild(para);
+                        element.append(brak);
+                    }
+
+                }
+                
+             }
+                function clearTask(){
+                    document.querySelector('#taskname').value = '';
+                    document.querySelector('#taskcat').value = 'Achievement';
+                    document.querySelector('#tasktime').value = '';
+                }
+                function processTime(atime){
+                    var parts = atime.split(":");
+                    var hour = parseInt(parts[0]);
+                    var part2 = parts[1].split(" ");
+                    if (part2[1].toLowerCase == "pm"){
+                        hour += 12;
+                    }
+                    var minutes = parseInt(part2[0]);
+                    
+                    var today = new Date();
+                    var acttime = new Date(today.getFullYear(), today.getMonth(), today.getDate(), hour, minutes);
+                    return acttime;
+                }
+        </script>
+        <h4 style="padding-bottom: 10px">Make a Daily Schedule for Yourself</h4>
+        <h6 style="padding-bottom: 10px"> Beginnging and End of the Day </h6>
+        <div class="container-fluid" id="planner" style="padding-bottom: 20px">
+            <div class="form-inline" style="padding-bottom: 10px">
+                <label style="padding-right: 10px" for="atask">What time do you wake up?</label>
+                <input type="text" class="form-control" id="startday" placeholder="HH:MM AM">
+            </div>
+            <div class="form-inline" style="padding-bottom: 10px">
+                <label style="padding-right: 12px" for="atask">What time do you sleep?</label>
+                <input type="text" class="form-control" id="endday" placeholder="HH:MM PM">
+            </div>
+            <button type="submit" class="btn btn-primary" onclick="instruction = new Instruction('#startday', '#endday'); return false;">Submit Times</button>
+        </div>
+        
+        <h6 style="padding-bottom: 10px"> Making New Tasks </h6>
+        <form class="form-inline" name="tasker">
+            <div class="form-group" style="padding-right: 50px">
+                <label style="padding-right: 10px" for="atask">Task Name: </label>
+                <input type="text" class="form-control" id="taskname" placeholder="What needs to get done?" style="padding-right: 10px">
+                <label style="padding: 0px 10px 0px 40px" for="tasktime">Estimated Time: </label>
+                <input type="text" class="form-control" id="tasktime" placeholder="_ Hours, _ Minutes" style="padding-right: 10px">
+                <div class="form-group">
+                  <label style="padding: 0px 10px 0px 40px" for="taskcat">Activity Type:</label>
+                  <select class="form-control" id="taskcat">
+                    <option>Achievement</option>
+                    <option>Pleasant</option>
+                    <option>Routine</option>
+                  </select>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary" onclick="instruction.addTask('#taskname', '#taskcat', '#tasktime'); document.forms['tasker'].reset(); return false;">Submit Task</button>
+        </form>
+        <h6 style="padding-top: 20px">Your tasks will appear here: </h6>
+        <div class="container-fluid" id="tasklist" style="padding-top: 10px"></div>       
+
+        <div class="form-group" style="padding-top: 50px; padding-right: 70px">
+            <div class="d-flex justify-content-end">
+                <label for="email">Added All the Tasks?</label>
+            </div>
+            <div class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-success" onclick="schedule = new Schedule(instruction); schedule.makeSchedule(); return false;">Make Schedule</button>
+            </div>
+        </div>
+        <h4 style="padding-top: 50px">Your schedule will appear here: </h4>
+        <div class="container-fluid" id="schedule" style="padding-top: 20px"></div>
+    </div>
+
+        
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    </body>
+</html>
